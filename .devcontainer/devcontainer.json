@@ -1,0 +1,28 @@
+{
+  "name": "Webtop ubuntu-xfce (Ubuntu + XFCE)",
+  "image": "ghcr.io/linuxserver/webtop:ubuntu-xfce",
+
+  // s6(/init) 必须作为 PID 1 启动桌面
+  "overrideCommand": false,
+  "privileged": true,
+  "containerUser": "root",
+  "remoteUser": "root",
+  "updateRemoteUserUID": false,
+
+  "containerEnv": {
+    "TZ": "Asia/Shanghai",
+    "START_DOCKER": "false"
+  },
+
+  "hostRequirements": { "cpus": 4 },
+
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "onAutoForward": "openBrowserOnce" }
+  },
+
+  "postStartCommand": {
+    "shm": "mount -o remount,size=1g /dev/shm",
+    "acl": "setfacl -R -m u:abc:rwX -d -m u:abc:rwX /workspaces || chown -R abc:abc /workspaces"
+  }
+}
